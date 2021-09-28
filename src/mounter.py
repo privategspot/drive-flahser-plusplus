@@ -5,13 +5,13 @@ import logging
 
 
 def default_searcher():
-        """
-        Стандартная функция поиска подключенных устройств
-        Ищет устройства по пути /dev/ устройства соответствующие патерну sd[b-z]3
-        """
-        default_path = "/dev/sd[b-z]3"
-        paths = glob.glob(default_path)
-        return paths
+    """
+    Стандартная функция поиска подключенных устройств
+    Ищет устройства по пути /dev/ устройства соответствующие патерну sd[b-z]3
+    """
+    default_path = "/dev/sd[b-z]3"
+    paths = glob.glob(default_path)
+    return paths
 
 
 class Mounter:
@@ -36,7 +36,7 @@ class Mounter:
         Возвращает массив путей с примонтированными устройствами
         """
         return self._mounted_paths[:]
-    
+
     def _get_next_id(self):
         next_id = self._next_id
         self._used_ids.add(next_id)
@@ -60,7 +60,8 @@ class Mounter:
         mkdir_cmd = f"mkdir -p {mount_path}"
 
         try:
-            logging.log(logging.INFO, f"создание папки для монтирования {mount_path}")
+            logging.log(
+                logging.INFO, f"создание папки для монтирования {mount_path}")
             os.system(mkdir_cmd)
         except FileExistsError:
             pass
@@ -106,6 +107,6 @@ class Mounter:
         """
         for path in self._mounted_paths:
             self._umount(path)
-        
+
         if self.delete_paths:
             self._delete_directory(mount_root)
