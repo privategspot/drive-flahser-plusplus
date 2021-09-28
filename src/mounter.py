@@ -20,7 +20,7 @@ class Mounter:
     Класс инкапсулирующий логику по монтированию usb-флешек в Linux
     """
 
-    def __init__(self, mount_root: str, searcher: typing.Callable = None):
+    def __init__(self, mount_root: str, delete_paths: bool = False, searcher: typing.Callable = None):
         if searcher == None:
             self.searcher = default_searcher
         else:
@@ -29,6 +29,7 @@ class Mounter:
         self._next_id = 0
         self._mount_root = mount_root
         self._mounted_paths = []
+        self.delete_paths = delete_paths
         logging.basicConfig(level=logging.INFO)
     
     def _get_next_id(self):
@@ -59,6 +60,13 @@ class Mounter:
         except FileExistsError:
             pass
         return mount_path
+
+    def _delete_directory(self, path):
+        """
+        Удаляет папку
+        """
+        logging.info(f"удаление папки {path}")
+        os.system(f"rm -rf {path}")
 
     def _mount(self, src, dest):
         """
@@ -93,3 +101,6 @@ class Mounter:
         """
         for path in self._mounted_paths:
             self._umount(path)
+        
+        if self.delete_paths:
+            self._delete_directory(self._mount_root)
