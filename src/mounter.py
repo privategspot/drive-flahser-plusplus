@@ -50,9 +50,10 @@ class Mounter:
         """
         id = self._get_next_id()
         mount_path = root + f"{id}"
+        mkdir_cmd = f"mkdir -p {mount_path}"
 
         try:
-            os.makedirs(mount_path)
+            os.system(mkdir_cmd)
         except FileExistsError:
             pass
         logging.log(logging.INFO, f"Создана папка для монтирования {mount_path}")
