@@ -20,14 +20,13 @@ class Mounter:
     Класс инкапсулирующий логику по монтированию usb-флешек в Linux
     """
 
-    def __init__(self, mount_root: str, delete_paths: bool = False, searcher: typing.Callable = None):
+    def __init__(self, delete_paths: bool = False, searcher: typing.Callable = None):
         if searcher == None:
             self.searcher = default_searcher
         else:
             self.searcher = searcher
         self._used_ids = set()
         self._next_id = 0
-        self._mount_root = mount_root
         self._mounted_paths = []
         self.delete_paths = delete_paths
         logging.basicConfig(level=logging.INFO)
@@ -82,14 +81,14 @@ class Mounter:
         logging.info(f"монтирование устройства {src} в {dest}")
         os.system(mount_cmd)
 
-    def mount(self) -> int:
+    def mount(self, mount_root: str) -> int:
         """
         Ищет покдлюченые устройства используя функцию поиска searcher
         и монтирует их в папки с уникальным идентификатором
         """
         devices = self._search_devices()
         for dev in devices:
-            mount_path = self._create_directory(self._mount_root)
+            mount_path = self._create_directory(mount_root)
             self._mount(dev, mount_path)
             self._mounted_paths.append(mount_path)
 
@@ -101,7 +100,7 @@ class Mounter:
         logging.info(f"размонтирование {mount_path}")
         os.system(umount_cmd)
 
-    def umount(self):
+    def umount(self, mount_root: str):
         """
         Демонтирует примонтированные устройства
         """
@@ -109,4 +108,4 @@ class Mounter:
             self._umount(path)
         
         if self.delete_paths:
-            self._delete_directory(self._mount_root)
+            self._delete_directory(mount_root)
