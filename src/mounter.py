@@ -29,6 +29,7 @@ class Mounter:
         self._next_id = 0
         self._mount_root = mount_root
         self._mounted_paths = []
+        logging.basicConfig(level=logging.INFO)
     
     def _get_next_id(self):
         next_id = self._next_id
@@ -41,7 +42,7 @@ class Mounter:
         Ищет подключеные устройства при помощи функции поиска
         """
         devices = self.searcher()
-        logging.log(logging.INFO, f"Найдены следующие устройства:\n{devices}")
+        logging.log(logging.INFO, f"найдены следующие устройства: {devices}")
         return devices
 
     def _create_directory(self, root):
@@ -53,10 +54,10 @@ class Mounter:
         mkdir_cmd = f"mkdir -p {mount_path}"
 
         try:
+            logging.log(logging.INFO, f"создание папки для монтирования {mount_path}")
             os.system(mkdir_cmd)
         except FileExistsError:
             pass
-        logging.log(logging.INFO, f"Создана папка для монтирования {mount_path}")
         return mount_path
 
     def _mount(self, src, dest):
@@ -64,8 +65,8 @@ class Mounter:
         Монтирует устройства в папки с уникальным идентификатором
         """
         mount_cmd = f"mount {src} {dest}"
+        logging.info(f"монтирование устройства {src} в {dest}")
         os.system(mount_cmd)
-        logging.log(logging.INFO, f"Устройство {src} примонтировано в {dest}")
 
     def mount(self) -> int:
         """
@@ -83,6 +84,7 @@ class Mounter:
         Демонтирует usb флешку по пути mount_path
         """
         umount_cmd = f"umount {mount_path}"
+        logging.info(f"размонтирование {mount_path}")
         os.system(umount_cmd)
 
     def umount(self):
