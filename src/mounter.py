@@ -21,7 +21,10 @@ class Mounter:
     """
 
     def __init__(self, mount_root: str, searcher: typing.Callable = None):
-        self.searcher = searcher
+        if searcher == None:
+            self.searcher = default_searcher
+        else:
+            self.searcher = searcher
         self._used_ids = set()
         self._next_id = 0
         self._mount_root = mount_root
