@@ -31,6 +31,12 @@ class Mounter:
         self._mounted_paths = []
         self.delete_paths = delete_paths
         logging.basicConfig(level=logging.INFO)
+
+    def get_mounted_paths(self):
+        """
+        Возвращает массив путей с примонтированными устройствами
+        """
+        return self._mounted_paths[:]
     
     def _get_next_id(self):
         next_id = self._next_id
