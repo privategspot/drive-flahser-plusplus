@@ -49,7 +49,7 @@ class Mounter:
         Создает папку для монтирования usb-флешки
         """
         id = self._get_next_id()
-        mount_path = root + f"/{id}"
+        mount_path = root + f"{id}"
 
         try:
             os.makedirs(mount_path)
