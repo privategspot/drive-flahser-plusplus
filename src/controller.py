@@ -18,6 +18,7 @@ class Controller:
         Точка входа в приложения
         """
         self.view.show_main_menu()
+        self.ask_menu_item()
 
     def stop(self):
         """
@@ -30,6 +31,7 @@ class Controller:
         Вызывает главное меню по выполнению оборачиваемой функции
         """
         inner(*args, **kwargs)
+        self.view.show_main_menu()
         self.ask_menu_item()
 
     def ask_menu_item(self):
@@ -37,9 +39,10 @@ class Controller:
         Опрос пользователя на выбор пункта меню
         """
         message = "Выберите пункт меню: "
-        correct_values = range(1, 3)
+        correct_values = range(1, 4)
         item = self.view.ask_for(
-            message, lambda answer: answer in correct_values)
+            message, lambda answer: int(answer) in correct_values)
+        item = int(item)
 
         if item == 1:
             self._with_menu(self.mount_flashdrive())
@@ -47,6 +50,7 @@ class Controller:
             self._with_menu(self.umount_flashdrive())
         elif item == 3:
             self.stop()
+        exit(1)
 
     def ask_delete_option(self):
         """
