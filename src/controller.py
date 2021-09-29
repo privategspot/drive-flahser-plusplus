@@ -39,7 +39,7 @@ class Controller:
         Опрос пользователя на выбор пункта меню
         """
         message = "Выберите пункт меню: "
-        correct_values = range(1, 4)
+        correct_values = range(1, self.view.menu_items_count + 1)
         item = self.view.ask_for(
             message, lambda answer: int(answer) in correct_values)
         item = int(item)
@@ -49,6 +49,8 @@ class Controller:
         elif item == 2:
             self._with_menu(self.umount_flashdrive)
         elif item == 3:
+            self._with_menu(self.ask_delete_option)
+        elif item == 4:
             self.stop()
         exit(1)
 
@@ -57,15 +59,17 @@ class Controller:
         Определяет необходимость удаление папок монтирования
         в зависимости от ввода пользователя
         """
-        message = "Удалять папки для монтирования после размонтирования? "
+        message = "Удалять папки для монтирования после размонтирования? (y/n) "
 
         correct_values = NEGATIVE_ANSWERS + POSITIVE_ANSWERS
         answer = self.view.ask_for(
             message, lambda answer: answer in correct_values)
         if answer in NEGATIVE_ANSWERS:
             self.mounter.delete_paths = False
+            self.view.show_message("Опция установлена в False")
         elif answer in POSITIVE_ANSWERS:
             self.mounter.delete_paths = True
+            self.view.show_message("Опция установлена в True")
 
     def _ask_for_mount_path(self):
         """
