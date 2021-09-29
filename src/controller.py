@@ -45,9 +45,9 @@ class Controller:
         item = int(item)
 
         if item == 1:
-            self._with_menu(self.mount_flashdrive())
+            self._with_menu(self.mount_flashdrive)
         elif item == 2:
-            self._with_menu(self.umount_flashdrive())
+            self._with_menu(self.umount_flashdrive)
         elif item == 3:
             self.stop()
         exit(1)
